@@ -27,6 +27,11 @@ class PermissionResource extends Resource
                     ->label('nome')
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('roles')
+                    ->label('Perfil')
+                    ->multiple()
+                    ->relationship('roles', 'name')
+                    ->preload(),    
             ]);
     }
 
@@ -38,7 +43,7 @@ class PermissionResource extends Resource
                     ->label('Nome'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Criado em')
-                    ->dateTime(),
+                    ->dateTime('d/m/Y H:i'),
             ])
             ->filters([
                 //
