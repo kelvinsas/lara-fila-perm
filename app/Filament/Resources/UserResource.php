@@ -12,6 +12,7 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
 
 class UserResource extends Resource
 {
@@ -34,8 +35,15 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('password')
                     ->label('Senha')
                     ->password()
+                    ->dehydrateStateUsing(fn ($state) => Hash::make($state))
+                    ->dehydrated(fn ($state) => filled($state))
                     ->required(fn (string $context): bool => $context === 'create')
                     ->maxLength(255),
+                Forms\Components\Select::make('roles')
+                    ->label('Perfil')
+                    ->multiple()
+                    ->relationship('roles', 'name')
+                    ->preload(),
             ]);
     }
 
