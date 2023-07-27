@@ -19,12 +19,19 @@ class RoleResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
+    protected static ?string $modelLabel = 'Perfil';
+
+    protected static ?string $pluralModelLabel = 'Perfis';
+
+    protected static ?string $navigationGroup = 'Configurações';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->label('Nome')
+                    ->unique(ignoreRecord:true)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\Select::make('permissions')

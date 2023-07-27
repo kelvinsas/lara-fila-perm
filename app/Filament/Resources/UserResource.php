@@ -20,6 +20,10 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
+    protected static ?string $modelLabel = 'Usuário';
+
+    protected static ?string $pluralModelLabel = 'Usuários';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -30,6 +34,7 @@ class UserResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
+                    ->unique(ignoreRecord:true)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('password')

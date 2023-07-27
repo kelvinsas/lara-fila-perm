@@ -16,6 +16,9 @@
     "require-dev": {
         "doctrine/dbal": "^3.6",
         "fakerphp/faker": "^1.9.1",
+        "laravel-lang/attributes": "^2.3",
+        "laravel-lang/lang": "^12.24",
+        "laravel-lang/publisher": "^14.6",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
