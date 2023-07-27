@@ -42,7 +42,9 @@ class UserResource extends Resource
                 Forms\Components\Select::make('roles')
                     ->label('Perfil')
                     ->multiple()
-                    ->relationship('roles', 'name')
+                    ->relationship('roles', 'name', fn(Builder $query)=>
+                        auth()->user()->hasRole('Admin')? null : $query->where('name', '!=', 'Admin')
+                    )
                     ->preload(),
             ]);
     }
@@ -83,5 +85,15 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
-    }    
+    }  
+    
+    public static function getEloquentQuery(): Builder
+    {
+        return auth()->user()->hasRole('Admin')
+        ? parent::getEloquentQuery()
+        : parent::getEloquentQuery()->whereHas(
+            'roles',
+            fn(Builder $query) => $query->where('name', '!=', 'Admin')
+        );
+    }
 }
