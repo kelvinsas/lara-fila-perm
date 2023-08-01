@@ -17,7 +17,7 @@ class PermissionResource extends Resource
 {
     protected static ?string $model = Permission::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
 
     protected static ?string $modelLabel = 'Permissão';
 
@@ -30,7 +30,7 @@ class PermissionResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
-                    ->label('nome')
+                    ->label('Nome')
                     ->unique(ignoreRecord:true)
                     ->required()
                     ->maxLength(255),
