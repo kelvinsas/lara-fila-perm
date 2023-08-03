@@ -2,26 +2,25 @@
 
 namespace App\Policies;
 
-use App\Models\Product;
+use App\Models\Batch;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
-class ProductPolicy
+class BatchPolicy
 {
-    /**
+       /**
      * Determine whether the user can view any models.
      */
     public function viewAny(User $user): bool
     {
-        return $user->hasPermissionTo('read_product');
+        return $user->hasPermissionTo('read_batch');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Product $product): bool
+    public function view(User $user, Batch $batch): bool
     {
-        return $user->hasPermissionTo('read_product');
+        return $user->hasPermissionTo('read_batch');
     }
 
     /**
@@ -29,23 +28,22 @@ class ProductPolicy
      */
     public function create(User $user): bool
     {
-        return $user->hasPermissionTo('create_product');
+        return $user->hasPermissionTo('create_batch');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Product $product): bool
+    public function update(User $user, Batch $batch): bool
     {
-        return $user->hasPermissionTo('update_product');
+        return $user->hasPermissionTo('update_batch');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Product $product): bool
+    public function delete(User $user, Batch $batch): bool
     {
-        return $user->hasPermissionTo('delete_product');
+        return $user->hasPermissionTo('delete_batch');
     }
-
 }

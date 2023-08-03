@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('batchs', function (Blueprint $table) {
+        Schema::create('batches', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('amount');
             $table->date('date');
-            $table->bigInteger('discard');
-            $table->bigInteger('approved');
-            $table->bigInteger('defect');
+            $table->integer('status')->default(1);
+            $table->bigInteger('discard')->nullable();
+            $table->bigInteger('approved')->nullable();
+            $table->bigInteger('defect')->nullable();
             $table->foreignId('product_id')->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
@@ -33,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('batchs');
+        Schema::dropIfExists('batches');
     }
 };

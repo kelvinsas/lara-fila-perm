@@ -24,6 +24,8 @@ class UserResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Usuários';
 
+    protected static ?string $navigationGroup = 'Configurações';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -69,7 +71,7 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

@@ -20,6 +20,7 @@ class Batch extends Model
         'discard',
         'approved',
         'defect',
+        'status',
         'product_id',
         'user_id',
 
@@ -42,4 +43,15 @@ class Batch extends Model
     protected $casts = [
         //
     ];
+
+    public function Users()
+    {
+        return $this->belongsTo('App\Models\User',  'user_id', 'id');
+    }
+
+    public function Products()
+    {
+        return $this->belongsTo('App\Models\Product',  'product_id', 'id');
+    }
+    
 }
