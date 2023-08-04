@@ -35,7 +35,11 @@ class BatchPolicy
      * Determine whether the user can update the model.
      */
     public function update(User $user, Batch $batch): bool
-    {
+    {   
+        if($batch->status == 3 && !$user->hasRole(['Admin', 'Manager'])){
+            return false;
+        }
+        
         return $user->hasPermissionTo('update_batch');
     }
 

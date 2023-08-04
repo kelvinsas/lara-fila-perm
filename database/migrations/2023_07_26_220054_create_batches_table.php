@@ -22,9 +22,12 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()
+            $table->foreignId('producer_id')->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
+            $table->foreignId('lecturer_id')->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');    
             $table->timestamps();
         });
     }

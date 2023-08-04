@@ -5,6 +5,8 @@ namespace App\Filament\Resources\BatchResource\Pages;
 use App\Filament\Resources\BatchResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Closure;
+use Illuminate\Database\Eloquent\Model;
 
 class ListBatches extends ListRecords
 {
@@ -24,5 +26,10 @@ class ListBatches extends ListRecords
     protected function getDefaultTableSortDirection(): ?string
     {
         return 'desc';
+    }
+
+    protected function getTableRecordUrlUsing(): ?Closure
+    {
+        return fn (Model $record): string => false;
     }
 }

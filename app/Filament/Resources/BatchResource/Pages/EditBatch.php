@@ -22,4 +22,11 @@ class EditBatch extends EditRecord
         return $this->getResource()::getUrl('index');
     }
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        $data['lecturer_id'] = auth()->id();
+
+        return $data;
+    }
+
 }

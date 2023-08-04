@@ -46,7 +46,7 @@ class BatchResource extends Resource
                     ->required()
                     ->disabled(fn (string $context): bool => $context === 'edit')
                     ->relationship('Products', 'name')
-                    ->preload(),    
+                    ->preload(),                  
                 Forms\Components\TextInput::make('discard')
                     ->label('Descartados')
                     ->required()
@@ -65,26 +65,12 @@ class BatchResource extends Resource
                     ->hidden(fn (string $context): bool => $context === 'create')
                     ->numeric()
                     ->minValue(0),                    
-                Forms\Components\DatePicker::make('date')
-                    ->label('Data')
-                    ->displayFormat('d/m/Y')
-                    ->default(now())
-                    ->disabled(),
                 Forms\Components\Select::make('status')
                     ->options([
-                        1 => 'Aberto',
-                        2 => 'Conferindo',
+                        2 => 'Conferindo ...',
                         3 => 'Fechado',
                     ])
-                    ->default(1)
-                    ->disabled(fn (string $context): bool => $context === 'create'),   
-                Forms\Components\Select::make('user_id')
-                    ->label('Usuario')
-                    ->default($user->id)
-                    ->required()
-                    ->relationship('Users', 'name')
-                    ->disabled()
-                    ->preload(),        
+                    ->hidden(fn (string $context): bool => $context === 'create'),                        
             ]);
     }
 
@@ -98,13 +84,12 @@ class BatchResource extends Resource
                 Tables\Columns\TextColumn::make('products.name')
                     ->label('Produto'),
                 Tables\Columns\TextColumn::make('users.name')
-                    ->label('Usuario'),
+                    ->label('Produtor'),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Quantidade'),
                 Tables\Columns\TextColumn::make('date')
                     ->label('Data')
                     ->date('d/m/Y'),
-                // Tables\Columns\TextColumn::make('status'),
                 Tables\Columns\BadgeColumn::make('status')
                     ->enum([
                         1 => 'Aberto',
@@ -122,16 +107,25 @@ class BatchResource extends Resource
                         'heroicon-o-lock-closed' => 3,
                     ])
                     ->sortable(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Alterado em')
-                    ->dateTime('d/m/Y h:i'),
+                Tables\Columns\TextColumn::make('lecturers.name')
+                    ->label('Conferente'),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        3 => 'Fechado',
+                        2 => 'Conferindo',
+                        1 => 'Aberto',
+                    ])
+                    ->attribute('status'),
+                    Tables\Filters\SelectFilter::make('product')
+                        ->relationship('products', 'name'),
+                    Tables\Filters\SelectFilter::make('user_id')
+                        ->relationship('users', 'name')           
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->visible(fn (Batch $record): bool => $record->status != 3),
+                    ->visible(fn (Batch $record): bool => $record->status != 3 || auth()->user()->hasRole(['Admin', 'Manager'])),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

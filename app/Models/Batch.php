@@ -22,8 +22,8 @@ class Batch extends Model
         'defect',
         'status',
         'product_id',
-        'user_id',
-
+        'user_id', //producer_id
+        'lecturer_id',
     ];
 
     /**
@@ -52,6 +52,11 @@ class Batch extends Model
     public function Products()
     {
         return $this->belongsTo('App\Models\Product',  'product_id', 'id');
+    }
+
+    public function Lecturers()
+    {
+        return $this->belongsTo('App\Models\User',  'lecturer_id', 'id');
     }
     
 }
