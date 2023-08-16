@@ -22,7 +22,7 @@ class Batch extends Model
         'defect',
         'status',
         'product_id',
-        'user_id', //producer_id
+        'producer_id', //producer_id
         'lecturer_id',
     ];
 
@@ -44,9 +44,9 @@ class Batch extends Model
         //
     ];
 
-    public function Users()
+    public function Producers()
     {
-        return $this->belongsTo('App\Models\User',  'user_id', 'id');
+        return $this->belongsTo('App\Models\User',  'producer_id', 'id');
     }
 
     public function Products()
@@ -58,5 +58,13 @@ class Batch extends Model
     {
         return $this->belongsTo('App\Models\User',  'lecturer_id', 'id');
     }
+
+    public function getProductionDay(){
+        
+    }
+
+
+
+
     
 }

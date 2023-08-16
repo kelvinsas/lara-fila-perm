@@ -16,9 +16,9 @@ return new class extends Migration
             $table->bigInteger('amount');
             $table->date('date');
             $table->integer('status')->default(1);
-            $table->bigInteger('discard')->nullable();
-            $table->bigInteger('approved')->nullable();
-            $table->bigInteger('defect')->nullable();
+            $table->bigInteger('discard')->nullable()->default(0);
+            $table->bigInteger('approved')->nullable()->default(0);
+            $table->bigInteger('defect')->nullable()->default(0);
             $table->foreignId('product_id')->constrained()
                 ->onUpdate('cascade')
                 ->onDelete('cascade');

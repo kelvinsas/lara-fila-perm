@@ -37,4 +37,9 @@ class Product extends Model
     protected $casts = [
         //
     ];
+
+    public function getBatches()
+    {
+        return $this->hasOne('App\Models\Batch',  'product_id', 'id');
+    }
 }

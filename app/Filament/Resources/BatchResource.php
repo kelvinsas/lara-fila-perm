@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\BatchResource\Pages;
 use App\Filament\Resources\BatchResource\RelationManagers;
 use App\Models\Batch;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -12,6 +13,8 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+use Carbon\Carbon;
 
 class BatchResource extends Resource
 {
@@ -83,7 +86,7 @@ class BatchResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('products.name')
                     ->label('Produto'),
-                Tables\Columns\TextColumn::make('users.name')
+                Tables\Columns\TextColumn::make('producers.name')
                     ->label('Produtor'),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Quantidade'),
@@ -119,9 +122,24 @@ class BatchResource extends Resource
                     ])
                     ->attribute('status'),
                     Tables\Filters\SelectFilter::make('product')
-                        ->relationship('products', 'name'),
-                    Tables\Filters\SelectFilter::make('user_id')
-                        ->relationship('users', 'name')           
+                        ->relationship('products', 'name')
+                        ->label('Produto'),
+                    Tables\Filters\Filter::make('date')
+                        ->form([Forms\Components\DatePicker::make('date')->format('Y-m-d')->displayFormat('d/m/Y')])
+                        ->indicateUsing(function (array $data): ?string {
+                            if (! $data['date']) {
+                                return null;
+                            }
+                     
+                            return 'Data: ' . Carbon::parse($data['date'])->toFormattedDateString('Y-m-d');
+                        })
+                        ->label('Data'),    
+                    Tables\Filters\SelectFilter::make('lecturer_id')
+                        ->relationship('lecturers', 'name')
+                        ->label('Conferente'),            
+                    Tables\Filters\SelectFilter::make('producer_id')
+                        ->relationship('producers', 'name')
+                        ->label('Produtor')           
             ])
             ->actions([
                 Tables\Actions\EditAction::make()

@@ -18,7 +18,7 @@ class CreateBatch extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        $data['user_id'] = auth()->id();
+        $data['producer_id'] = auth()->id();
         $data['date'] = now();
         $data['status'] = 1;
  
