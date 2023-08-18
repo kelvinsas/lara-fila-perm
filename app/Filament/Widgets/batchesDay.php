@@ -21,6 +21,15 @@ class batchesDay extends BaseWidget
         return auth()->user()->hasPermissionTo('access_panel');
     }
 
+
+    protected function filter($collection){
+        if(auth()->user()->hasRole(['Admin', 'Manager', 'Lecturer'])){
+            return $collection;
+        }else{
+            return $collection->where('producer_id', auth()->user()->id);
+        }
+    }
+
     protected function getCards(): array
     {
 
@@ -32,38 +41,45 @@ class batchesDay extends BaseWidget
         $startMonth = $now->startOfMonth()->format('Y-m-d');
         $endMonth = $now->endOfMonth()->format('Y-m-d');
 
-        // Consultas no banco
-        $todayBatch = Batch::whereDate('date', $today)->get();
-        $weekBatch = Batch::whereBetWeen('date', array( $startWeek, $endWeek))->get();        
-        $monthBatch = Batch::whereBetween('date', array( $startMonth, $endMonth))->get();
-        $openBatch = Batch::where('status', '<', 3)->get();
-
+        // Consultas no banco  
+        $monthBatch = $this->filter(Batch::whereBetween('date', array( $startMonth, $endMonth))->get());
+        $openBatch =  $monthBatch->where('status', '<', 3);
+        $todayBatch = $monthBatch->where('date', $today);
+        $weekBatch =  $monthBatch->whereBetween('date', array( $startWeek, $endWeek));
 
        
-
-
         //Exibicao dos cards
         return [
-            Card::make('Produção do Dia', $todayBatch->sum('approved'))
-                ->description('Itens produzidos e conferidos no dia.')
-                ->descriptionIcon('heroicon-s-trending-up'),
-            Card::make('Produção da Semana', $weekBatch->sum('approved'))
-                ->description('Itens produzidos e conferidos na semana.')
-                ->descriptionIcon('heroicon-s-trending-up'),
-            Card::make('Produção do Mes', $monthBatch->sum('approved'))
-                ->description('Itens produzidos e conferidos no mes.')
-                ->descriptionIcon('heroicon-s-trending-up'),
-            Card::make('Descartados do Dia', $todayBatch->sum('discard'))
-                ->description('Itens produzidos e conferidos no dia.')
-                ->descriptionIcon('heroicon-s-trending-up'),  
-            Card::make('Descartados do Mes', $monthBatch->sum('discard'))
-                ->description('Itens produzidos e conferidos no mes.')
+            Card::make('Produção do Dia', $todayBatch->sum('amount'))
+                ->description('Itens produzidos no dia.')
                 ->descriptionIcon('heroicon-s-trending-up')
-                ->chart([7, 2, 10, 3, 15, 4, 17])
+                ->chart([17, 2, 10, 3, 15, 4, 17])
+                ->color('primary'),
+            Card::make('Produção da Semana', $weekBatch->sum('amount'))
+                ->description('Itens produzidos na semana.')
+                ->descriptionIcon('heroicon-s-trending-up')
+                ->chart([17, 2, 10, 3, 15, 4, 17])
+                ->color('primary'),
+            Card::make('Produção do Mes', $monthBatch->sum('amount'))
+                ->description('Itens produzidos no mes.')
+                ->descriptionIcon('heroicon-s-trending-up')
+                ->chart([17, 2, 10, 3, 15, 4, 17])
+                ->color('primary'),
+            Card::make('Aprovados no Mes', $monthBatch->sum('approved'))
+                ->description('Itens conferidos no mes.')
+                ->descriptionIcon('heroicon-s-trending-up')
+                ->chart([17, 2, 10, 3, 15, 4, 17])
+                ->color('success'),  
+            Card::make('Descartados do Mes', $monthBatch->sum('discard'))
+                ->description('Itens descartados no mes.')
+                ->descriptionIcon('heroicon-s-trending-up')
+                ->chart([17, 2, 10, 3, 15, 4, 17])
                 ->color('danger'),    
-            Card::make('Abertos ou Conferindo', $openBatch->sum('amount'))
-                ->description('Itens produzidos e conferidos no mes.')
-                ->descriptionIcon('heroicon-s-trending-up'),    
+            Card::make('Abertos ou Conferindo', ($openBatch->sum('amount') - $openBatch->sum('approved')))
+                ->description('Itens ainda não conferidos no mes.')
+                ->descriptionIcon('heroicon-s-trending-up')
+                ->chart([17, 2, 10, 3, 15, 4, 17])
+                ->color('secondary'),
 
                 
         ];

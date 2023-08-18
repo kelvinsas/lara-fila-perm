@@ -21,6 +21,9 @@ class CreateBatch extends CreateRecord
         $data['producer_id'] = auth()->id();
         $data['date'] = now();
         $data['status'] = 1;
+        $data['discard'] = 0;
+        $data['defect'] = 0;
+        $data['approved'] = 0;
  
         return $data;
     }

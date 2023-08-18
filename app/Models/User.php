@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Filament\Models\Contracts\FilamentUser;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+
 
 
 class User extends Authenticatable implements FilamentUser
@@ -50,4 +52,5 @@ class User extends Authenticatable implements FilamentUser
     {
         return $this->hasPermissionTo('access_panel');	
     }
+    
 }

@@ -147,7 +147,6 @@ class BatchResource extends Resource
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
     
@@ -166,5 +165,15 @@ class BatchResource extends Resource
             'edit' => Pages\EditBatch::route('/{record}/edit'),
         ];
     }    
+
+    public static function getEloquentQuery(): Builder
+    {
+        return auth()->user()->hasRole(['Admin', 'Manager', 'Lecturer'])
+        ? parent::getEloquentQuery()
+        : parent::getEloquentQuery()->whereHas(
+            'producers',
+            fn(Builder $query) => $query->where('id', auth()->user()->id)
+        );
+    }
 
 }

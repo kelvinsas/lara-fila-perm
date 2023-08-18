@@ -26,7 +26,12 @@ class ProdutsProduproducer extends BaseWidget
 
     protected function getTableQuery(): Builder
     {
-        return  Batch::query()->latest();
+        if(auth()->user()->hasRole(['Admin', 'Manager', 'Lecturer'])){
+            return  Batch::query()->latest();
+        }else{
+            return  Batch::query()->where('producer_id', auth()->user()->id)->latest();
+        }
+        
     }
 
     protected function getTableColumns(): array
@@ -70,5 +75,15 @@ class ProdutsProduproducer extends BaseWidget
             ])
             ->sortable(),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return auth()->user()->hasRole(['Admin', 'Manager'])
+        ? parent::getEloquentQuery()
+        : parent::getEloquentQuery()->whereHas(
+            'producers',
+            fn(Builder $query) => $query->where('id', auth()->user()->id)
+        );
     }
 }

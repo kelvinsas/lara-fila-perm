@@ -26,6 +26,8 @@ class EditBatch extends EditRecord
     {
         $data['lecturer_id'] = auth()->id();
 
+        $data['status'] =  $data['status'] == 3 ?  $data['status'] : 2;
+
         return $data;
     }
 
