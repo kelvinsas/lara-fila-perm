@@ -46,6 +46,7 @@ class BatchResource extends Resource
                     ->minValue(1),
                 Forms\Components\Select::make('product_id')
                     ->label('Produto')
+                    ->searchable()
                     ->required()
                     ->disabled(fn (string $context): bool => $context === 'edit')
                     ->relationship('Products', 'name')
