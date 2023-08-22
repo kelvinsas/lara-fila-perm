@@ -22,7 +22,7 @@ class Batch extends Model
         'defect',
         'status',
         'product_id',
-        'producer_id', //producer_id
+        'producer_id', 
         'lecturer_id',
     ];
 
