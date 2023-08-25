@@ -28,6 +28,9 @@ class EditBatch extends EditRecord
 
         $data['status'] =  $data['status'] == 3 ?  $data['status'] : 2;
 
+        $data['approved'] = isset($data['new-approved']) ? $data['approved'] + $data['new-approved'] : $data['approved'];
+
+
         return $data;
     }
 

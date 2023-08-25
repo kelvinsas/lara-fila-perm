@@ -62,13 +62,20 @@ class BatchResource extends Resource
                     ->required()
                     ->hidden(fn (string $context): bool => $context === 'create')
                     ->numeric()
-                    ->minValue(0),
+                    ->minValue(0),   
                 Forms\Components\TextInput::make('approved')
-                    ->label('Aprovados')
-                    ->required()
+                    ->label(fn ( $record): string =>  $record->status !== 2 ? 'Aprovados' : 'Aprovados Anteriormente')
+                    ->disabled(fn ( $record): bool =>  $record->status === 2)
                     ->hidden(fn (string $context): bool => $context === 'create')
                     ->numeric()
-                    ->minValue(0),                    
+                    ->minValue(0),              
+                Forms\Components\TextInput::make('new-approved')
+                    ->label('Novos Aprovados')
+                    ->default("0")
+                    ->required()
+                    ->hidden(fn ( $record , string $context): bool =>  $context === 'create' ? true : $record->status !== 2)
+                    ->numeric()
+                    ->minValue(0),                                 
                 Forms\Components\Select::make('status')
                     ->options([
                         2 => 'Conferindo ...',
@@ -139,10 +146,16 @@ class BatchResource extends Resource
                             return 'Data: ' . Carbon::parse($data['date'])->toFormattedDateString('Y-m-d');
                         })
                         ->query(function (Builder $query, array $data): Builder {
-                            return $query
-                                ->whereDate('date',  
-                                    $data['date']
-                                );
+                        
+                            if ($data['date'] !== null){
+                                return $query
+                                    ->whereDate('date',  
+                                        $data['date']
+                                    );
+                            }else{
+                                return $query;
+                            }    
+                            
                         })
                         ->label('Data'),    
                     Tables\Filters\SelectFilter::make('lecturer_id')
