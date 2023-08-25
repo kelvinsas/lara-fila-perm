@@ -86,14 +86,17 @@ class BatchResource extends Resource
                     ->label('Lote')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('products.name')
-                    ->label('Produto'),
+                    ->label('Produto')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('producers.name')
-                    ->label('Produtor'),
+                    ->label('Produtor')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->label('Quantidade'),
                 Tables\Columns\TextColumn::make('date')
                     ->label('Data')
-                    ->date('d/m/Y'),
+                    ->date('d/m/Y')
+                    ->sortable(),
                 Tables\Columns\BadgeColumn::make('status')
                     ->enum([
                         1 => 'Aberto',
@@ -112,7 +115,8 @@ class BatchResource extends Resource
                     ])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('lecturers.name')
-                    ->label('Conferente'),
+                    ->label('Conferente')
+                    ->sortable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
@@ -133,6 +137,12 @@ class BatchResource extends Resource
                             }
                      
                             return 'Data: ' . Carbon::parse($data['date'])->toFormattedDateString('Y-m-d');
+                        })
+                        ->query(function (Builder $query, array $data): Builder {
+                            return $query
+                                ->whereDate('date',  
+                                    $data['date']
+                                );
                         })
                         ->label('Data'),    
                     Tables\Filters\SelectFilter::make('lecturer_id')
