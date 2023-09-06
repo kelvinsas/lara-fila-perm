@@ -28,6 +28,7 @@ class ExportProductionByProducerAndProduct implements FromCollection, WithHeadin
                                 DB::raw('sum(batches.discard) as discard'),
                                 DB::raw('sum(batches.defect) as defect'),
                                 DB::raw('sum(batches.approved) as approved'),
+                                DB::raw('sum(batches.liberted) as liberted'),
                             )
                             ->join('users', 'users.id', 'batches.producer_id')
                             ->join('products', 'products.id', 'batches.product_id')
@@ -58,6 +59,7 @@ class ExportProductionByProducerAndProduct implements FromCollection, WithHeadin
             'Descartados',
             'Defeitos',
             'Aprovados',
+            'Liberados'
         ];
     }
 

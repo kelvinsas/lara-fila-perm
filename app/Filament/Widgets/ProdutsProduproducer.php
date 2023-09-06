@@ -40,40 +40,42 @@ class ProdutsProduproducer extends BaseWidget
             Tables\Columns\TextColumn::make('id')
             ->label('Lote')
             ->sortable(),
-        Tables\Columns\TextColumn::make('products.name')
-            ->label('Produto'),
-        Tables\Columns\TextColumn::make('producers.name')
-            ->label('Produtor'),
-        Tables\Columns\TextColumn::make('amount')
-            ->label('Quantidade'),
-        Tables\Columns\TextColumn::make('discard') 
-            ->label('Descarte'),    
-        Tables\Columns\TextColumn::make('defect') 
-            ->label('Defeito'),   
-        Tables\Columns\TextColumn::make('approved') 
-            ->label('Aprovado'),   
-        Tables\Columns\TextColumn::make('date')
-            ->label('Data')
-            ->date('d/m/Y'),
-        Tables\Columns\TextColumn::make('lecturers.name')
-            ->label('Conferente'),
-        Tables\Columns\BadgeColumn::make('status')
-            ->enum([
-                1 => 'Aberto',
-                2 => 'Conferindo',
-                3 => 'Fechado',
-            ])
-            ->colors([
-                'primary' => 2,
-                'success' => 1,
-                'danger' => 3,
-            ])
-            ->icons([
-                'heroicon-o-clipboard-check' => 2,
-                'heroicon-o-lock-open' => 1,
-                'heroicon-o-lock-closed' => 3,
-            ])
-            ->sortable(),
+            Tables\Columns\TextColumn::make('products.name')
+                ->label('Produto'),
+            Tables\Columns\TextColumn::make('producers.name')
+                ->label('Produtor'),
+            Tables\Columns\TextColumn::make('amount')
+                ->label('Quantidade'),
+            Tables\Columns\TextColumn::make('discard') 
+                ->label('Descarte'),    
+            Tables\Columns\TextColumn::make('defect') 
+                ->label('Defeito'),   
+            Tables\Columns\TextColumn::make('approved') 
+                ->label('Aprovado'),   
+            Tables\Columns\TextColumn::make('date')
+                ->label('Data')
+                ->date('d/m/Y'),
+            Tables\Columns\TextColumn::make('lecturers.name')
+                ->label('Conferente'),
+            Tables\Columns\BadgeColumn::make('status')
+                ->enum([
+                    1 => 'Aberto',
+                    2 => 'Conferindo',
+                    3 => 'Fechado',
+                    4 => 'Liberado',
+                ])
+                ->colors([
+                    'primary' => 2,
+                    'success' => 4,
+                    'danger' => 3,
+                ])
+                ->icons([
+                    'heroicon-o-clipboard-check' => 2,
+                    'heroicon-o-lock-open' => 1,
+                    'heroicon-o-lock-closed' => 3,
+                    'heroicon-o-check' => 4,
+                ])
+                ->sortable(),
         ];
     }
 

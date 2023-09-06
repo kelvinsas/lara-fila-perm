@@ -109,16 +109,18 @@ class BatchResource extends Resource
                         1 => 'Aberto',
                         2 => 'Conferindo',
                         3 => 'Fechado',
+                        4 => 'Liberado',
                     ])
                     ->colors([
                         'primary' => 2,
-                        'success' => 1,
+                        'success' => 4,
                         'danger' => 3,
                     ])
                     ->icons([
                         'heroicon-o-clipboard-check' => 2,
                         'heroicon-o-lock-open' => 1,
                         'heroicon-o-lock-closed' => 3,
+                        'heroicon-o-check' => 4,
                     ])
                     ->sortable(),
                 Tables\Columns\TextColumn::make('lecturers.name')
@@ -128,6 +130,7 @@ class BatchResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
+                        4 => 'Liberado',
                         3 => 'Fechado',
                         2 => 'Conferindo',
                         1 => 'Aberto',
@@ -166,10 +169,32 @@ class BatchResource extends Resource
                         ->label('Produtor')           
             ])
             ->actions([
+                
+                Tables\Actions\Action::make('updateLiberate')
+                    ->label('Liberar')  
+                    ->icon('heroicon-o-check')
+                    ->color('success')
+                    ->visible(fn (Batch $record): bool => $record->status == 3 && auth()->user()->hasRole(['Admin', 'Manager']))
+                    ->mountUsing(fn (Forms\ComponentContainer $form, Batch $record) => $form->fill([
+                        'liberted' => $record->approved,
+                    ]))
+                    ->action(function (Batch $record, array $data): void {
+          
+                        $record->status = 4;
+                        $record->liberted = $data['liberted'];
+                        $record->save();
+                    })
+                    ->form([
+                        Forms\Components\TextInput::make('liberted')
+                        ->label('Liberados')
+                        ->numeric()
+                        ->minValue(0)              
+                        ->required(),
+                    ]),
                 Tables\Actions\EditAction::make()
                     ->visible(fn (Batch $record): bool => $record->status != 3 || auth()->user()->hasRole(['Admin', 'Manager'])),
                 Tables\Actions\DeleteAction::make(),
-            ])
+                ])
             ->bulkActions([
             ]);
     }

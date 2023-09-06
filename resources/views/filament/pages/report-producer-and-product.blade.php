@@ -77,7 +77,7 @@
                         <th class="filament-tables-header-cell p-0 filament-table-header-cell-id">
                             <button type="button" class="flex w-full items-center gap-x-1 whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 cursor-default ">
                                 <span>
-                                    Descartados
+                                    Produzidos
                                 </span>
                             </button>
                         </th>
@@ -91,6 +91,13 @@
                         <th class="filament-tables-header-cell p-0 filament-table-header-cell-id">
                             <button type="button" class="flex w-full items-center gap-x-1 whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 cursor-default ">
                                 <span>
+                                    Descartados
+                                </span>
+                            </button>
+                        </th>
+                        <th class="filament-tables-header-cell p-0 filament-table-header-cell-id">
+                            <button type="button" class="flex w-full items-center justify-end gap-x-1 whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 cursor-default ">
+                                <span>
                                     Aprovado
                                 </span>
                             </button>
@@ -98,7 +105,7 @@
                         <th class="filament-tables-header-cell p-0 filament-table-header-cell-id">
                             <button type="button" class="flex w-full items-center justify-end gap-x-1 whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 cursor-default ">
                                 <span>
-                                    Produzidos
+                                    Liberados
                                 </span>
                             </button>
                         </th>
@@ -139,7 +146,7 @@
                                         <div class="filament-tables-text-column px-4 py-3">
                                             <div class="inline-flex items-center space-x-1 rtl:space-x-reverse">
                                                 <span class="">
-                                                    {{$producerAndProduct->discard}}
+                                                    {{$producerAndProduct->amount}}
                                                 </span>
                                             </div>
                                         </div>
@@ -165,6 +172,19 @@
                                         <div class="filament-tables-text-column px-4 py-3">
                                             <div class="inline-flex items-center space-x-1 rtl:space-x-reverse">
                                                 <span class="">
+                                                    {{$producerAndProduct->discard}}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="filament-tables-reorder-cell w-4 whitespace-nowrap px-4">
+                                <div class="filament-tables-column-wrapper">
+                                    <div class="flex w-full justify-end text-start">
+                                        <div class="filament-tables-text-column px-4 py-3">
+                                            <div class="inline-flex items-center space-x-1 rtl:space-x-reverse">
+                                                <span class="">
                                                     {{$producerAndProduct->approved}}
                                                 </span>
                                             </div>
@@ -178,7 +198,7 @@
                                         <div class="filament-tables-text-column px-4 py-3">
                                             <div class="inline-flex items-center space-x-1 rtl:space-x-reverse">
                                                 <span class="">
-                                                    {{$producerAndProduct->amount}}
+                                                    {{$producerAndProduct->liberted}}
                                                 </span>
                                             </div>
                                         </div>

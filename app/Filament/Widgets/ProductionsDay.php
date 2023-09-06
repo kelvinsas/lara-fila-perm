@@ -49,12 +49,14 @@ class ProductionsDay extends LineChartWidget
        $dataAmount = [];
        $dataApproved = [];
        $dataDiscard = [];
+       $dataLiberted = [];
 
        foreach($groupDay as $day){
             array_push($dataLabel, Carbon::parse($day[0]->date)->format('d'));
             array_push($dataAmount, $day->sum('amount'));
             array_push($dataApproved, $day->sum('approved'));
             array_push($dataDiscard, $day->sum('discard'));
+            array_push($dataLiberted, $day->sum('liberted'));
 
             
        }
@@ -64,20 +66,26 @@ class ProductionsDay extends LineChartWidget
                 [
                     'label' => 'Itens Produzidos',
                     'data' => $dataAmount,
-                    'borderColor' => '#f59e0b',
-                    'backgroundColor' => '#f59e0bb5',
+                    'borderColor' => '#1d65f5',
+                    'backgroundColor' => '#1d65eb',
                 ],
                 [
                     'label' => 'Itens Aprovados',
                     'data' => $dataApproved,
-                    'borderColor' => '#16a34a',
-                    'backgroundColor' => '#16a34aab',
+                    'borderColor' => '#f59e0b',
+                    'backgroundColor' => '#f59e0bb5',
                 ],
                 [
                     'label' => 'Itens Descartados',
                     'data' => $dataDiscard,
                     'borderColor' => '#e11d48',
                     'backgroundColor' => '#e11d48bf',
+                ],
+                [
+                    'label' => 'Itens Liberados',
+                    'data' => $dataLiberted,
+                    'borderColor' => '#16a34a',
+                    'backgroundColor' => '#16a34aab',
                 ]
             ],
             'labels' => $dataLabel,

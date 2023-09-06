@@ -35,6 +35,7 @@ class ExportProductionByProducer implements FromCollection, WithHeadings
                                 DB::raw('sum(batches.discard) as discard'),
                                 DB::raw('sum(batches.defect) as defect'),
                                 DB::raw('sum(batches.approved) as approved'),
+                                DB::raw('sum(batches.liberted) as liberted'),
                             )
                             ->join('users', 'users.id', 'batches.producer_id')
                             ->whereBetween('batches.date', array( $date['date-start'], $date['date-end']))
@@ -61,6 +62,8 @@ class ExportProductionByProducer implements FromCollection, WithHeadings
             'Descartados',
             'Defeitos',
             'Aprovados',
+            'Liberados'
+
         ];
     }
 

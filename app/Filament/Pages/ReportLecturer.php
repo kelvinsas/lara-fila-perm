@@ -98,6 +98,7 @@ class ReportLecturer extends Page
                                 DB::raw('sum(batches.discard) as discard'),
                                 DB::raw('sum(batches.defect) as defect'),
                                 DB::raw('sum(batches.approved) as approved'),
+                                DB::raw('sum(batches.liberted) as liberted'),
                             )
                             ->join('users', 'users.id', 'batches.lecturer_id')
                             ->whereBetween('batches.date', $this->getFilterDate())
