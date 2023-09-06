@@ -7,9 +7,9 @@
                         <div>
                             <h4 class="filament-tables-header-heading text-sm font-bold tracking-tight">
                                 {{ __('Periodo: ') }}
-                                {{$this->getDateNow('d/m/Y')['date-start'] }}
+                                {{$this->getFilterDate('d/m/Y')['date-start'] }}
                                 {{ __(' a ')}}
-                                {{$this->getDateNow('d/m/Y')['date-end']}}
+                                {{$this->getFilterDate('d/m/Y')['date-end']}}
                             </h4>
                             <p class="filament-tables-header-description"></p>
                         </div>

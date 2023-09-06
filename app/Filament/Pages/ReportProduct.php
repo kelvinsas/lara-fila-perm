@@ -13,7 +13,10 @@ use Carbon\Carbon;
 
 use App\Exports\ExportProductionByProduct;
 use App\Models\Batch;
+use App\Models\Product;
+use App\Models\User;
 use Filament\Forms;
+use Illuminate\Database\Eloquent\Builder;
 
 class ReportProduct extends Page
 {
@@ -34,10 +37,17 @@ class ReportProduct extends Page
     protected function getActions(): array
     {
         return [
-            Action::make('Periodo')
+            Action::make('Filtros')
                 ->action(function (array $data): void {
-                    session()->put('REPORT_PRODUCT_DATE_FILTER', $data);
+                    session()->put('REPORT_PRODUCT_DATA_FILTER', $data);
                 })
+                ->mountUsing(fn (Forms\ComponentContainer $form) => $form->fill([
+                    'date-start' => $this->getFilterDate()['date-start'],
+                    'date-end' => $this->getFilterDate()['date-end'],
+                    'product' => $this->getFilterProduct(),
+                    'producer' => $this->getFilterProducer(),
+                    'lecturer' => $this->getFilterlecturer()
+                ]))
                 ->form([
                 Forms\Components\DateTimePicker::make('date-start')
                     ->format('Y-m-d')
@@ -49,17 +59,39 @@ class ReportProduct extends Page
                     ->displayFormat('d/m/Y')
                     ->label('Data Final')
                     ->required(),
+                Forms\Components\Select::make('product')
+                    ->label('Produto')
+                    ->searchable()
+                    ->multiple()
+                    ->options(Product::query()->pluck('name', 'id'))
+                    ->preload(),              
+                Forms\Components\Select::make('producer')
+                    ->label('Produtor')
+                    ->searchable()
+                    ->multiple()
+                    ->options(User::query()->pluck('name', 'id'))
+                    ->preload(),  
+                Forms\Components\Select::make('lecturer')
+                    ->label('Conferente')
+                    ->multiple()
+                    ->searchable()
+                    ->options(User::query()->pluck('name', 'id'))
+                    ->preload(), 
                 ])
-                ->icon('heroicon-o-calendar'),
+                ->icon('heroicon-o-filter'),
             ActionGroup::make([
                 Action::make('Excel')->action(function () {
-                    return Excel::download(new ExportProductionByProduct($this->getDateNow()), 'ExportProductionByProducer_'.Carbon::now().'.xlsx');
+                    return Excel::download(new ExportProductionByProduct(), 'ExportProductionByProducer_'.Carbon::now().'.xlsx');
                 })->icon('heroicon-s-download'),
             ])->label('Exportação')           
         ];
     }
 
     protected function getData() {
+
+        $product = $this->getFilterProduct();
+        $producer = $this->getFilterProducer();
+        $lecturer = $this->getFilterLecturer();
 
         $production =   Batch::
                             select(
@@ -70,7 +102,16 @@ class ReportProduct extends Page
                                 DB::raw('sum(batches.approved) as approved'),
                             )
                             ->join('products', 'products.id', 'batches.product_id')
-                            ->whereBetween('batches.date', $this->getDateNow())
+                            ->whereBetween('batches.date', $this->getFilterDate())
+                            ->when($product, function (Builder $query, array $product) {
+                                $query->whereIn('product_id', $product);
+                            })
+                            ->when($producer, function (Builder $query, array $producer) {
+                                $query->whereIn('producer_id', $producer);
+                            })
+                            ->when($lecturer, function (Builder $query, array $lecturer) {
+                                $query->whereIn('lecturer_id', $lecturer);
+                            })
                             ->groupBy('batches.product_id')
                             ->get();
 
@@ -78,8 +119,27 @@ class ReportProduct extends Page
 
     }
 
-    protected function getDateNow($format = 'Y-m-d') {
-        $dateSession = session()->get('REPORT_PRODUCT_DATE_FILTER');
+    protected function getFilterProduct():array {
+        $dataSession = session()->get('REPORT_PRODUCT_DATA_FILTER');
+
+            return  $dataSession['product'] ?? array();
+    }
+
+    protected function getFilterProducer():array {
+        $dataSession = session()->get('REPORT_PRODUCT_DATA_FILTER');
+
+            return  $dataSession['producer'] ?? array();
+    }
+
+    protected function getFilterLecturer():array {
+        $dataSession = session()->get('REPORT_PRODUCT_DATA_FILTER');
+
+            return  $dataSession['lecturer'] ?? array();
+    }
+
+
+    protected function getFilterDate($format = 'Y-m-d') {
+        $dateSession = session()->get('REPORT_PRODUCT_DATA_FILTER');
 
         if ($format !== 'Y-m-d' && $dateSession){
             return  array(
