@@ -1,3 +1,7 @@
+@php
+    $data = $this->getData();
+@endphp
+
 <x-filament::page>
     <div class="filament-tables-container rounded-xl border border-gray-300 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
         <div class="filament-tables-header-container" x-show="hasHeader = true || selectedRecords.length">
@@ -56,7 +60,7 @@
                     'rounded-t-xl': ! hasHeader,
                     'border-t': hasHeader,
                 }">
-        @if($this->getData()->count() > 0)           
+        @if($data->count() > 0)           
         <table class="filament-tables-table w-full table-auto divide-y text-start dark:divide-gray-700">
             <thead class="divide-y whitespace-nowrap dark:divide-gray-700">
                 <tr class="filament-tables-row transition bg-gray-500/5">
@@ -89,7 +93,7 @@
                         </button>
                     </th>
                     <th class="filament-tables-header-cell p-0 filament-table-header-cell-id">
-                        <button type="button" class="flex w-full items-center gap-x-1 whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 cursor-default ">
+                        <button type="button" class="flex w-full items-center justify-end gap-x-1 whitespace-nowrap px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 cursor-default ">
                             <span>
                                 Saldo
                             </span>
@@ -98,7 +102,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y whitespace-nowrap dark:divide-gray-700">
-                @foreach ( $this->getData() as $production )
+                @foreach ( $data as $production )
                     <tr class="filament-tables-row transition">
                         <td class="filament-tables-reorder-cell w-4 whitespace-nowrap px-4 ">
                             <div class="filament-tables-column-wrapper">
@@ -154,7 +158,7 @@
                         </td>
                         <td class="filament-tables-reorder-cell w-4 whitespace-nowrap px-4">
                             <div class="filament-tables-column-wrapper">
-                                <div class="flex w-full justify-start text-start">
+                                <div class="flex w-full justify-end text-start">
                                     <div class="filament-tables-text-column px-4 py-3">
                                         <div class="inline-flex items-center space-x-1 rtl:space-x-reverse">
                                             <span class="">
@@ -167,6 +171,79 @@
                         </td>
                     </tr>
                 @endforeach
+                {{-- Total  --}}
+                <tr class="filament-tables-footer transition">
+                    <td class="filament-tables-reorder-cell w-4 whitespace-nowrap px-4 filament-table-footer">
+                        <div class="filament-tables-column-wrapper">
+                            <div class="flex w-full justify-start text-start">
+                                <div class="filament-tables-text-column px-4 py-3">
+                                    <div class="inline-flex items-center space-x-1 rtl:space-x-reverse">
+                                        <span class="font-bold">
+                                            {{'Total'}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="filament-tables-reorder-cell w-4 whitespace-nowrap px-4">
+                        <div class="filament-tables-column-wrapper">
+                            <div class="flex w-full justify-start text-start">
+                                <div class="filament-tables-text-column px-4 py-3">
+                                    <div class="inline-flex items-center space-x-1 rtl:space-x-reverse">
+                                        <span class="font-bold">
+                                            {{$data->sum('amount')}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="filament-tables-reorder-cell w-4 whitespace-nowrap px-4">
+                        <div class="filament-tables-column-wrapper">
+                            <div class="flex w-full justify-start text-start">
+                                <div class="filament-tables-text-column px-4 py-3">
+                                    <div class="inline-flex items-center space-x-1 rtl:space-x-reverse">
+                                        <span class="font-bold">
+                                            {{$data->sum('approved')}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="filament-tables-reorder-cell w-4 whitespace-nowrap px-4">
+                        <div class="filament-tables-column-wrapper">
+                            <div class="flex w-full justify-start text-start">
+                                <div class="filament-tables-text-column px-4 py-3">
+                                    <div class="inline-flex items-center space-x-1 rtl:space-x-reverse">
+                                        <span class="font-bold">
+                                            {{$data->sum('liberted')}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="filament-tables-reorder-cell w-4 whitespace-nowrap px-4">
+                        <div class="filament-tables-column-wrapper">
+                            <div class="flex w-full justify-end text-start">
+                                <div class="filament-tables-text-column px-4 py-3">
+                                    <div class="inline-flex items-center space-x-1 rtl:space-x-reverse">
+                                        <span class="font-bold">
+                                            @php
+                                                $totalSaldo = $data->sum('amount') - (  $data->sum('approved') + $data->sum('discard') + $data->sum('defect'));
+                                            @endphp
+                                            {{                                                
+                                                $totalSaldo > 0 ? $totalSaldo : 0
+                                            }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
         @else

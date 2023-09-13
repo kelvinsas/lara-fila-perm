@@ -16,6 +16,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 
+
 class ReportLecturer extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
@@ -84,6 +85,7 @@ class ReportLecturer extends Page
             ])->label('Exportação')           
         ];
     }
+
 
     protected function getData() {
 
