@@ -74,6 +74,7 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test dUser',
         //     'email' => 'tesdt@example.com',
         //     'password' => '123',
+        //$this->call(PlacesTableSeeder::class);
         // ]);
     }
 }
