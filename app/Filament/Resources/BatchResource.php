@@ -38,6 +38,11 @@ class BatchResource extends Resource
                     ->disabled()
                     ->numeric()
                     ->minValue(1),
+                Forms\Components\DatePicker::make('date')
+                    ->label('Data')
+                    ->required()
+                    ->hidden(fn (string $context): bool => $context === 'create' || !auth()->user()->hasRole(['Admin', 'Manager']))
+                    ->maxDate(now()),
                 Forms\Components\TextInput::make('amount')
                     ->label('Quantidade')
                     ->required()
@@ -78,8 +83,10 @@ class BatchResource extends Resource
                     ->minValue(0),                                 
                 Forms\Components\Select::make('status')
                     ->options([
+                        1 => 'Aberto',
                         2 => 'Conferindo ...',
                         3 => 'Fechado',
+                        4 => 'Liberado'
                     ])
                     ->hidden(fn (string $context): bool => $context === 'create'),                        
             ]);
@@ -192,7 +199,7 @@ class BatchResource extends Resource
                         ->required(),
                     ]),
                 Tables\Actions\EditAction::make()
-                    ->visible(fn (Batch $record): bool => $record->status != 3 || auth()->user()->hasRole(['Admin', 'Manager'])),
+                    ->visible(fn (Batch $record): bool => $record->status < 3 || auth()->user()->hasRole(['Admin', 'Manager'])),
                 Tables\Actions\DeleteAction::make(),
                 ])
             ->bulkActions([
