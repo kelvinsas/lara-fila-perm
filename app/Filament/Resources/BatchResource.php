@@ -41,8 +41,24 @@ class BatchResource extends Resource
                 Forms\Components\DatePicker::make('date')
                     ->label('Data')
                     ->required()
-                    ->hidden(fn (string $context): bool => $context === 'create' || !auth()->user()->hasRole(['Admin', 'Manager']))
-                    ->maxDate(now()),
+                    ->hidden(fn (string $context): bool => $context === 'edit' || !auth()->user()->hasRole(['Admin', 'Manager']))
+                    ->maxDate(now())
+                    ->default(now())
+					->displayFormat('d/m/Y'),
+                Forms\Components\Select::make('producer_id')
+                    ->label('Produtor')
+                    ->searchable()
+                    ->required()
+                    ->hidden(fn (): bool => !auth()->user()->hasRole(['Admin', 'Manager']))
+                    ->relationship('Producers', 'name')
+                    ->preload(),             
+                Forms\Components\Select::make('lecturer_id')
+                    ->label('Conferente')
+                    ->searchable()
+                    ->required()
+                    ->hidden(fn (): bool => !auth()->user()->hasRole(['Admin', 'Manager']))
+                    ->relationship('Lecturers', 'name')
+                    ->preload(),          
                 Forms\Components\TextInput::make('amount')
                     ->label('Quantidade')
                     ->required()

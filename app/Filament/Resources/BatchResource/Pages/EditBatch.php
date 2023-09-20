@@ -24,7 +24,7 @@ class EditBatch extends EditRecord
 
     protected function mutateFormDataBeforeSave(array $data): array
     {
-        $data['lecturer_id'] = auth()->id();
+        $data['lecturer_id'] = isset($data['lecturer_id']) ? $data['lecturer_id'] : auth()->id();
 
         $data['status'] =  $data['status'] == 3 ?  $data['status'] : 2;
 
